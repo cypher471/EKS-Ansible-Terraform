@@ -1,0 +1,20 @@
+- name: Deleting EKS Infrastructure
+  community.general.terraform:
+    project_path: "{{ playbook_dir }}/../terraform"
+    state: absent
+    force_init: true
+    variables:
+      azs: "{{ availability_zones | to_json }}"
+      cluster_name: "{{ cluster_name }}"
+      cidr_block: "{{ vpc_cidr }}"
+      eks_role_arn: "{{ eks_role_arn }}"
+      eks_role_name: "{{ eks_role_name }}"
+      eks_version: "{{ eks_version }}"
+      name: "{{ vpc_name }}" 
+      node_subnets: "{{ node_subnets | to_json }}"
+      node_subnets_name: "{{ node_subnets_name | to_json }}"
+      region: "{{ aws_region }}"
+      pod_subnets: "{{ pod_subnets | to_json }}"
+      pod_subnets_name: "{{ pod_subnets_name | to_json }}"
+      security_group_name: "{{ security_group_name }}"
+

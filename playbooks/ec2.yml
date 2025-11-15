@@ -1,0 +1,25 @@
+- hosts: localhost
+  name: Create EC2 Instance
+  vars_files: ../vars
+  tasks:
+    - name: Create EC2 Instance
+      include_role:
+        name: create_ec2_instance
+
+- name: Configure instance
+  hosts: launched
+  gather_facts: false
+  become: true
+  vars_files: ../vars
+  tasks:
+    - name: Configure EC2 Instance
+      include_role:
+        name: configure_ec2_instance
+
+# - hosts: localhost
+#   name: Take AMI snapshot
+#   vars_files: ../vars
+#   tasks:
+#     - name: Take snapshot
+#       include_role:
+#         name: create_ami_from_ec2

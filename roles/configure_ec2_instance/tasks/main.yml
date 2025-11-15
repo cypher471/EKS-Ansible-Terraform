@@ -1,0 +1,26 @@
+- name: Copy local folder to instance via SCP/rsync
+  ansible.posix.synchronize:
+    src: "{{ source_copy }}"
+    dest: "{{ destination_copy }}"
+    mode: push
+- name: Configure Instance
+  ansible.builtin.shell: |
+    dpkg -i /home/ubuntu/binaries/*.deb
+    rm -rf /home/ubuntu/binaries/*.deb
+    cp /home/ubuntu/binaries/helm /usr/local/bin
+    cp /home/ubuntu/binaries/zarf /usr/local/bin
+    mkdir /etc/eks
+    cp /home/ubuntu/binaries/bootstrap.sh /etc/eks
+    chmod +x /etc/eks/bootstrap.sh
+    chmod +x /usr/local/bin/helm
+    chmod +x /usr/local/bin/zarf
+    mkdir -p /etc/containerd
+    containerd config default | sudo tee /etc/containerd/config.toml > /dev/null
+    sed -i 's/SystemdCgroup = false/SystemdCgroup = true/' /etc/containerd/config.toml
+    sed -i 's/disabled_plugins = \["cri"\]/disabled_plugins = \[\]/' /etc/containerd/config.toml
+    systemctl daemon-reexec
+    systemctl restart containerd
+    systemctl enable kubelet
+    systemctl start kubelet
+
+

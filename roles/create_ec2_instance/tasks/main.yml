@@ -1,0 +1,37 @@
+- name: Start an instance with a public IP address
+  amazon.aws.ec2_instance:
+    name: "{{ ec2_name }}"
+    key_name: "{{ ec2_key_name }}"
+    vpc_subnet_id: "{{ ec2_subnet_id }}"
+    instance_type: "{{ ec2_instance_type }}"
+    security_group: "{{ ec2_security_group_id }}"
+    network_interfaces:
+      - assign_public_ip: true
+    image_id: "{{ ec2_image_id }}"
+    iam_instance_profile: "{{ ec2_iam_role }}"
+    wait: true
+    volumes:
+      - device_name: /dev/sda1
+        ebs:
+          volume_size: 100          # GB
+          volume_type: gp3
+          delete_on_termination: true
+  register: ec2_instance
+
+
+- name: Wait for SSH to become reachable
+  wait_for:
+    host: "{{ ec2_instance.instances[0].public_ip_address }}"
+    port: 22
+    delay: 10          # seconds to wait before first check
+    timeout: 300       # total time to wait before failing
+    state: started
+
+- name: Add new instance to host group
+  add_host:
+    name: "{{ ec2_instance.instances[0].public_ip_address }}"
+    groups: launched
+    ansible_user: ubuntu
+    ansible_ssh_private_key_file: "{{ ec2_private_key_path }}"
+
+
