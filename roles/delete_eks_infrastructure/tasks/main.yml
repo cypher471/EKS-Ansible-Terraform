@@ -7,6 +7,8 @@
       azs: "{{ availability_zones | to_json }}"
       cluster_name: "{{ cluster_name }}"
       cidr_block: "{{ vpc_cidr }}"
+      ec2_endpoint: "{{ ec2_endpoint }}"
+      eks_endpoint: "{{ eks_endpoint }}"
       eks_role_arn: "{{ eks_role_arn }}"
       eks_role_name: "{{ eks_role_name }}"
       eks_version: "{{ eks_version }}"
@@ -17,4 +19,5 @@
       pod_subnets: "{{ pod_subnets | to_json }}"
       pod_subnets_name: "{{ pod_subnets_name | to_json }}"
       security_group_name: "{{ security_group_name }}"
+      sts_endpoint: "{{ sts_endpoint }}"
 

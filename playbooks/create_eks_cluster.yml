@@ -1,16 +1,15 @@
 - hosts: localhost
   vars:
-    aws_region: "us-east-1"
-    cluster_name: "Test-Cluster"
-    eks_role_arn: "arn:aws:iam::868077586813:role/EKS-Master-Node-Policy"
-    eks_role_name: "EKS-Master-Node-Policy"
-    eks_version: 1.34
-    security_group_name: "EKS-Master-Node-Group"
-    vpc_name: "EKS"
-    vpc_cidr: "10.0.0.0/16"   
     availability_zones:
       - "us-east-1a"
       - "us-east-1b"
+    aws_region: "us-east-1"
+    cluster_name: "Test-Cluster"
+    ec2_endpoint: com.amazonaws.us-east-1.ec2
+    eks_endpoint: com.amazonaws.us-east-1.eks
+    eks_role_arn: "arn:aws:iam::868077586813:role/EKS-Master-Node-Policy"
+    eks_role_name: "EKS-Master-Node-Policy"
+    eks_version: 1.34  
     node_subnets:
       - "10.0.1.0/24"
       - "10.0.2.0/24"
@@ -23,21 +22,15 @@
     pod_subnets_name:
       - "Pod-Subnet-1"
       - "Pod-Subnet-2"
+    security_group_name: "EKS-Master-Node-Group"
+    sts_endpoint: com.amazonaws.us-east-1.sts
+    vpc_name: "EKS"
+    vpc_cidr: "10.0.0.0/16" 
   name: Creating EKS Cluster and Network Components
   tasks:
     - name: Creating EKS Infrastructure
       include_role:
         name: create_eks_infrastructure
 
-    # - name: Create Security Group
-    #   include_role:
-    #     name: create_security_group
-        
-    # - name: Create IAM Role
-    #   include_role:
-    #     name: create_iam_role
-        
-    # # - name: Create EKS Cluster
-    # #   include_role: 
-    # #     name: create_eks_cluster
+
 

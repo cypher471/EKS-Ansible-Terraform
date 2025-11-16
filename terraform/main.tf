@@ -136,8 +136,28 @@ resource "aws_eks_cluster" "eks" {
     endpoint_public_access  = true
     endpoint_private_access = true
   }
+}
 
-  tags = {
-    Name = var.cluster_name
-  }
+resource "aws_vpc_endpoint" "ec2" {
+  vpc_id       = aws_vpc.main.id
+  service_name = var.ec2_endpoint
+  subnet_ids   = [aws_subnet.Node-1.id, aws_subnet.Node-2.id]
+  security_group_ids = [aws_security_group.eks.id]
+  vpc_endpoint_type = "Interface"
+}
+
+resource "aws_vpc_endpoint" "eks" {
+  vpc_id       = aws_vpc.main.id
+  service_name = var.eks_endpoint
+  subnet_ids   = [aws_subnet.Node-1.id, aws_subnet.Node-2.id]
+  security_group_ids = [aws_security_group.eks.id]
+  vpc_endpoint_type = "Interface"
+}
+
+resource "aws_vpc_endpoint" "sts" {
+  vpc_id       = aws_vpc.main.id
+  service_name = var.sts_endpoint
+  subnet_ids   = [aws_subnet.Node-1.id, aws_subnet.Node-2.id]
+  security_group_ids = [aws_security_group.eks.id]
+  vpc_endpoint_type = "Interface"
 }
