@@ -1,0 +1,4 @@
+coredns
+kube-proxy  
+Amazon VPC CNI
+Amazon EKS Pod Identity Agent

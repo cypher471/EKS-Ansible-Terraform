@@ -8,10 +8,19 @@ variable "cluster_name" {
 variable "ec2_endpoint" {
   type = string
 }
+variable "ecr_api_endpoint" {
+  type = string
+}
+variable "ecr_dkr_endpoint" {
+  type = string
+}
 variable "eks_endpoint" {
   type = string
 }
-variable "eks_role_arn" { 
+variable "eks_auth_endpoint" {
+  type = string
+}
+variable "eks_node_role_name" { 
   type = string
 }
 variable "eks_role_name" { 
@@ -38,5 +47,8 @@ variable "security_group_name" {
   type = string
 }
 variable "sts_endpoint" {
+  type = string
+}
+variable "s3_gateway_endpoint" {
   type = string
 }

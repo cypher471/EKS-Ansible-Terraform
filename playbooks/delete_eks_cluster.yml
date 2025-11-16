@@ -1,14 +1,17 @@
 - hosts: localhost
   name: Delete All
   vars:
-    availability_zones:
-      - "us-east-1a"
-      - "us-east-1b"
     aws_region: "us-east-1"
+    availability_zones:
+      - "{{ aws_region }}a"
+      - "{{ aws_region }}b"
     cluster_name: "Test-Cluster"
-    ec2_endpoint: com.amazonaws.us-east-1.ec2
-    eks_endpoint: com.amazonaws.us-east-1.eks
-    eks_role_arn: "arn:aws:iam::868077586813:role/EKS-Master-Node-Policy"
+    ec2_endpoint: "com.amazonaws.{{ aws_region }}.ec2"
+    ecr_api_endpoint: "com.amazonaws.{{ aws_region }}.ecr.api"
+    ecr_dkr_endpoint: "com.amazonaws.{{ aws_region }}.ecr.dkr"
+    eks_endpoint: com.amazonaws.{{ aws_region }}.eks
+    eks_auth_endpoint: com.amazonaws.us-east-1.eks-auth
+    eks_node_role_name: "EKS-Node-Policy"
     eks_role_name: "EKS-Master-Node-Policy"
     eks_version: 1.34  
     node_subnets:
@@ -24,10 +27,11 @@
       - "Pod-Subnet-1"
       - "Pod-Subnet-2"
     security_group_name: "EKS-Master-Node-Group"
-    sts_endpoint: com.amazonaws.us-east-1.sts
+    sts_endpoint: "com.amazonaws.{{ aws_region }}.sts"
+    s3_gateway_endpoint: com.amazonaws.{{ aws_region }}.s3
     vpc_name: "EKS"
     vpc_cidr: "10.0.0.0/16" 
   tasks:
-    - name: Delete All
+    - name: Delete EKS Cluster and Network Components
       include_role:
         name: delete_eks_infrastructure
