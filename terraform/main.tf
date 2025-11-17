@@ -187,28 +187,17 @@ resource "aws_eks_addon" "coredns" {
 resource "aws_eks_node_group" "default" {
   cluster_name    = aws_eks_cluster.eks.name
   node_group_name = "${var.cluster_name}-ng"
-  node_role_arn   = aws_iam_role.eks_node_role.arn
+  node_role_arn   = aws_iam_role.eks_worker_role.arn
   subnet_ids      = [aws_subnet.Node-1.id, aws_subnet.Node-2.id]
 
-  launch_template {
-    id      = aws_launch_template.eks_nodes.id
-    version = "$Latest"
-  }
-
   scaling_config {
-    desired_size = 2
+    desired_size = 1
     min_size     = 1
-    max_size     = 3
+    max_size     = 2
   }
 
   ami_type       = "AL2023_x86_64_STANDARD"
   instance_types = ["t3.medium"]
-
-  depends_on = [
-    aws_iam_role_policy_attachment.eks_node_role_amazon_eks_worker_node,
-    aws_iam_role_policy_attachment.eks_node_role_amazon_ec2_container_registry_read_only,
-    aws_iam_role_policy_attachment.eks_node_role_vpc_cni,
-  ]
 }
 
 

@@ -1,20 +1,28 @@
 - hosts: localhost
   name: Create EC2 Instance
-  vars_files: ../vars
+  vars:    
+    ec2_iam_role: "arn:aws:iam::868077586813:instance-profile/image"
+    ec2_image_id: "ami-03f1d522d98841360"
+    ec2_instance_name: "image"
+    ec2_instance_type: "t3.medium"
+    ec2_key_name: "ubuntu"
+    ec2_name: "image"
+    ec2_private_key_path: ~/.ssh/ubuntu.pem
+    ec2_security_group_id: "sg-09e548e8ad9c04add"
+    ec2_subnet_id: "subnet-0bc77abb16408c104"
   tasks:
     - name: Create EC2 Instance
       include_role:
         name: create_ec2_instance
 
-- name: Configure instance
-  hosts: launched
-  gather_facts: false
-  become: true
-  vars_files: ../vars
-  tasks:
-    - name: Configure EC2 Instance
-      include_role:
-        name: configure_ec2_instance
+# - name: Configure instance
+#   hosts: launched
+#   gather_facts: false
+#   become: true
+#   tasks:
+#     - name: Configure EC2 Instance
+#       include_role:
+#         name: configure_ec2_instance
 
 # - hosts: localhost
 #   name: Take AMI snapshot
